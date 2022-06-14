@@ -7,7 +7,7 @@ require (
 	github.com/rancher/wrangler v1.0.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/urfave/cli/v2 v2.8.1
-	k8s.io/api v0.24.0
+	k8s.io/api v0.24.1
 	k8s.io/apimachinery v0.24.1
 	k8s.io/kube-openapi v0.0.0-20220614142933-1062c7ade5f8
 )
