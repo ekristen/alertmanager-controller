@@ -1,7 +1,7 @@
 package scheme
 
 import (
-	v1 "github.com/ekristen/prom-am-operator/pkg/apis/promam.ekristen.dev/v1"
+	v1 "github.com/ekristen/alertmanager-controller/pkg/apis/alertmanager.ekristen.dev/v1"
 	"github.com/rancher/wrangler/pkg/merr"
 	"github.com/rancher/wrangler/pkg/schemes"
 	appsv1 "k8s.io/api/apps/v1"

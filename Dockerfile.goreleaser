@@ -1,0 +1,16 @@
+FROM appropriate/curl as binaries
+ENV TINI_VERSION v0.18.0
+RUN curl --fail -sLo /tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-amd64
+
+FROM debian:stretch-slim
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/bin/amc"]
+CMD ["controller"]
+
+RUN apt-get update && apt-get install -y ca-certificates liblz4-1 && rm -rf /var/lib/apt/lists/*
+RUN useradd -r -u 999 -d /home/amc amc
+
+COPY --from=binaries /tini /usr/bin/tini
+COPY alertmanager-controller /usr/bin/amc
+RUN chmod +x /usr/bin/tini /usr/bin/amc
+
+USER amc

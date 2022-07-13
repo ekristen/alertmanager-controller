@@ -1,4 +1,4 @@
-# Prometheus Alertmanager Operator
+# Alertmanager Controller
 
 **Status:** Alpha
 

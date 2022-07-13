@@ -1,11 +1,12 @@
-apiVersion: promam.ekristen.dev/v1
+apiVersion: alertmanager.ekristen.dev/v1
 kind: Silence
 metadata:
   name: testing
 spec:
-  startsAt: 2022-05-30T00:00:00Z
-  endsAt: 2022-06-07T23:00:00Z
-  createdBy: prom-am-operator
+  url: http://192.168.11.76:9093
+  startsAt: 2022-07-12T00:00:00Z
+  endsAt: 2022-07-18T23:00:00Z
+  createdBy: alertmanager-controller
   comment: "automated silence"
   matchers:
     - name: blah

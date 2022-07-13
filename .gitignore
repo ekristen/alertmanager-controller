@@ -1,2 +1,5 @@
 .envrc
+cosign.key
 /*.yaml
+releases
+vendor

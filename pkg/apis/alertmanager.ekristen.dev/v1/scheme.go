@@ -1,7 +1,7 @@
 package v1
 
 import (
-	promam_ekristen_dev "github.com/ekristen/prom-am-operator/pkg/apis/promam.ekristen.dev"
+	alertmanager_ekristen_dev "github.com/ekristen/alertmanager-controller/pkg/apis/alertmanager.ekristen.dev"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -10,7 +10,7 @@ import (
 const Version = "v1"
 
 var SchemeGroupVersion = schema.GroupVersion{
-	Group:   promam_ekristen_dev.Group,
+	Group:   alertmanager_ekristen_dev.Group,
 	Version: Version,
 }
 

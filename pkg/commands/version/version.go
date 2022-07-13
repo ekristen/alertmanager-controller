@@ -3,8 +3,8 @@ package version
 import (
 	"fmt"
 
-	"github.com/ekristen/prom-am-operator/pkg/common"
-	"github.com/ekristen/prom-am-operator/pkg/version"
+	"github.com/ekristen/alertmanager-controller/pkg/common"
+	"github.com/ekristen/alertmanager-controller/pkg/version"
 	"github.com/urfave/cli/v2"
 )
 

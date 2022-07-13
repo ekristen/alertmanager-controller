@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"github.com/ekristen/prom-am-operator/pkg/commands/global"
-	"github.com/ekristen/prom-am-operator/pkg/common"
-	"github.com/ekristen/prom-am-operator/pkg/controller"
+	"github.com/ekristen/alertmanager-controller/pkg/commands/global"
+	"github.com/ekristen/alertmanager-controller/pkg/common"
+	"github.com/ekristen/alertmanager-controller/pkg/controller"
 	"github.com/urfave/cli/v2"
 )
 

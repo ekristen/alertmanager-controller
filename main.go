@@ -8,10 +8,10 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 
-	"github.com/ekristen/prom-am-operator/pkg/common"
+	"github.com/ekristen/alertmanager-controller/pkg/common"
 
-	_ "github.com/ekristen/prom-am-operator/pkg/commands/controller"
-	_ "github.com/ekristen/prom-am-operator/pkg/commands/version"
+	_ "github.com/ekristen/alertmanager-controller/pkg/commands/controller"
+	_ "github.com/ekristen/alertmanager-controller/pkg/commands/version"
 )
 
 func main() {

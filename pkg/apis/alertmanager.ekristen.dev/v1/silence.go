@@ -32,8 +32,9 @@ type SilenceSpec struct {
 }
 
 type SilenceStatus struct {
-	ID    string `json:"id,omitempty"`
-	State string `json:"state,omitempty"`
+	ID         string      `json:"id,omitempty"`
+	State      string      `json:"state,omitempty"`
+	Conditions []Condition `json:"conditions,omitempty"`
 }
 
 type Matcher struct {
@@ -41,4 +42,17 @@ type Matcher struct {
 	Value string `json:"value"`
 	Regex bool   `json:"isRegex"`
 	Equal bool   `json:"isEqual"`
+}
+
+func (in *SilenceStatus) Condition(name string) Condition {
+	for _, cond := range in.Conditions {
+		if cond.Type == name {
+			return cond
+		}
+	}
+	return Condition{}
+}
+
+func (in *Silence) Conditions() *[]Condition {
+	return &in.Status.Conditions
 }

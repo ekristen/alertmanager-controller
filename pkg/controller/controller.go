@@ -3,12 +3,12 @@ package controller
 import (
 	"context"
 
-	v1 "github.com/ekristen/prom-am-operator/pkg/apis/promam.ekristen.dev/v1"
-	"github.com/ekristen/prom-am-operator/pkg/scheme"
-	"github.com/ibuildthecloud/baaah"
+	"github.com/acorn-io/baaah"
+	"github.com/acorn-io/baaah/pkg/restconfig"
+	"github.com/acorn-io/baaah/pkg/router"
+	v1 "github.com/ekristen/alertmanager-controller/pkg/apis/alertmanager.ekristen.dev/v1"
+	"github.com/ekristen/alertmanager-controller/pkg/scheme"
 	"github.com/ibuildthecloud/baaah/pkg/crds"
-	"github.com/ibuildthecloud/baaah/pkg/restconfig"
-	"github.com/ibuildthecloud/baaah/pkg/router"
 	"github.com/rancher/wrangler/pkg/apply"
 	"k8s.io/apimachinery/pkg/runtime"
 )
@@ -48,8 +48,5 @@ func (c *Controller) Start(ctx context.Context) error {
 	if err := crds.Create(ctx, c.Scheme, v1.SchemeGroupVersion); err != nil {
 		return err
 	}
-	//if err := c.initData(ctx); err != nil {
-	//	return err
-	//}
 	return c.Router.Start(ctx)
 }
