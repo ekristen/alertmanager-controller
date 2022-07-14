@@ -8,8 +8,8 @@ require (
 	github.com/rancher/wrangler v1.0.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/urfave/cli/v2 v2.8.1
-	k8s.io/api v0.24.0
-	k8s.io/apimachinery v0.24.1
+	k8s.io/api v0.24.3
+	k8s.io/apimachinery v0.24.3
 	k8s.io/kube-openapi v0.0.0-20220413171646-5e7f5fdc6da6
 	sigs.k8s.io/controller-runtime v0.11.2
 )
