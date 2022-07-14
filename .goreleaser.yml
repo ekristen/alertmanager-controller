@@ -36,7 +36,10 @@ signs:
   - cmd: cosign
     stdin: "{{ .Env.COSIGN_PASSWORD }}"
     args:
-      ["sign-blob", "--key=cosign.key", "--output=${signature}", "${artifact}"]
+      - "sign-blob"
+      - "--key=cosign.key"
+      - "--output-signature=${signature}"
+      - "${artifact}"
     artifacts: all
 docker_signs:
   - artifacts: all
@@ -44,7 +47,7 @@ docker_signs:
 checksum:
   name_template: "checksums.txt"
 snapshot:
-  name_template: '{{ trimprefix .Summary "v" }}'
+  name_template: "{{ .Summary }}"
 changelog:
   sort: asc
   filters:
