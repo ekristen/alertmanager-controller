@@ -11,6 +11,7 @@ import (
 	"github.com/ibuildthecloud/baaah/pkg/crds"
 	"github.com/rancher/wrangler/pkg/apply"
 	"k8s.io/apimachinery/pkg/runtime"
+	kclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type Controller struct {
@@ -35,7 +36,14 @@ func New() (*Controller, error) {
 		return nil, err
 	}
 
-	routes(router)
+	client, err := kclient.New(cfg, kclient.Options{
+		Scheme: scheme.Scheme,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	routes(router, client)
 
 	return &Controller{
 		Router: router,
