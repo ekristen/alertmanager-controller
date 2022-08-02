@@ -1,6 +1,6 @@
 module github.com/ekristen/alertmanager-controller
 
-go 1.18
+go 1.19
 
 require (
 	github.com/acorn-io/baaah v0.0.0-20220711235249-cb4eb828afed
