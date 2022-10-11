@@ -183,3 +183,42 @@ func ManageSilence(req router.Request, resp router.Response) error {
 
 	return nil
 }
+
+func RemoveSilence(req router.Request, resp router.Response) error {
+	silence := req.Object.(*v1.Silence)
+
+	today := time.Now()
+	tomorrow := silence.Spec.EndsAt.Time
+
+	if tomorrow.After(today) {
+		amURL := strings.TrimSuffix(silence.Spec.URL, "/")
+
+		amReq, err := http.NewRequest("DELETE", fmt.Sprintf("%s/api/v2/silence/%s", amURL, silence.Status.ID), nil)
+		if err != nil {
+			silence.Status.State = "error"
+			resp.RetryAfter(time.Minute * 2)
+			resp.Objects(silence)
+
+			return nil
+		}
+
+		amResp, err := http.DefaultClient.Do(amReq)
+		if err != nil {
+			silence.Status.State = "error"
+			resp.RetryAfter(time.Minute * 2)
+			resp.Objects(silence)
+
+			return nil
+		}
+
+		if amResp.StatusCode > 399 {
+			silence.Status.State = "error"
+			resp.RetryAfter(time.Minute * 2)
+			resp.Objects(silence)
+
+			return nil
+		}
+	}
+
+	return nil
+}

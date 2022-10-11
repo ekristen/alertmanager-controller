@@ -29,7 +29,6 @@ require (
 	github.com/go-openapi/jsonreference v0.19.5 // indirect
 	github.com/go-openapi/swag v0.19.14 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/gnostic v0.5.7-v3refs // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
@@ -81,4 +80,4 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-replace github.com/acorn-io/baaah => github.com/ibuildthecloud/baaah-1 v0.0.0-20220712223440-b9025ece7c7c
+replace github.com/acorn-io/baaah => github.com/ibuildthecloud/baaah-1 v0.0.0-20220721061854-ace1137938e6
