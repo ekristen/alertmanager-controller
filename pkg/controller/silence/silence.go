@@ -199,7 +199,7 @@ func RemoveSilence(req router.Request, resp router.Response) error {
 			resp.RetryAfter(time.Minute * 2)
 			resp.Objects(silence)
 
-			return nil
+			return err
 		}
 
 		amResp, err := http.DefaultClient.Do(amReq)
@@ -208,7 +208,7 @@ func RemoveSilence(req router.Request, resp router.Response) error {
 			resp.RetryAfter(time.Minute * 2)
 			resp.Objects(silence)
 
-			return nil
+			return err
 		}
 
 		if amResp.StatusCode > 399 {
@@ -216,9 +216,13 @@ func RemoveSilence(req router.Request, resp router.Response) error {
 			resp.RetryAfter(time.Minute * 2)
 			resp.Objects(silence)
 
-			return nil
+			return err
 		}
 	}
 
+	return nil
+}
+
+func ManageSilence2(req router.Request, resp router.Response) error {
 	return nil
 }

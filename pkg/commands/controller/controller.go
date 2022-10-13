@@ -30,6 +30,7 @@ func init() {
 		Usage:  "controller",
 		Action: cmd.Execute,
 		Flags:  global.Flags(),
+		Before: global.Before,
 	}
 
 	common.RegisterCommand(cliCmd)

@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/acorn-io/baaah v0.0.0-20220711235249-cb4eb828afed
-	github.com/ibuildthecloud/baaah v0.0.0-20220419175848-b53f32e0abbc
 	github.com/rancher/wrangler v1.0.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.19.2
@@ -80,4 +79,4 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-replace github.com/acorn-io/baaah => github.com/ibuildthecloud/baaah-1 v0.0.0-20220721061854-ace1137938e6
+replace github.com/acorn-io/baaah => github.com/ekristen/baaah v0.0.0-20221012162152-f357e22d8e2c
