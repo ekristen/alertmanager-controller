@@ -79,4 +79,4 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-replace github.com/acorn-io/baaah => github.com/ekristen/baaah v0.0.0-20221012162152-f357e22d8e2c
+replace github.com/acorn-io/baaah => github.com/ekristen/baaah v0.0.0-20220731052009-5a4a3228e9bc
