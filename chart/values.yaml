@@ -4,7 +4,7 @@ minReadySeconds: 0
 
 image:
   repository: ghcr.io/ekristen/alertmanager-controller
-  tag: v0.4.0
+  tag: 0.4.0
   pullPolicy: IfNotPresent
   pullSecret: null
 
@@ -29,6 +29,9 @@ livenessProbe: {}
 #  initialDelaySeconds: 60
 #  timeoutSeconds: 30
 #  failureThreshold: 24
+
+rbac:
+  create: true
 
 container:
   port: 8080
@@ -131,3 +134,7 @@ volumes:
   configMapVolumes: {}
 #      - name: config-map-files
 #        configMapName: config-map-name
+
+serviceAccount:
+  labels: {}
+  annotations: {}

@@ -1,0 +1,73 @@
+{{- if .Values.rbac.create }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "backend.fullname" . }}
+  labels:
+    app: {{ include "backend.name" . }}
+    chart: {{ include "backend.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+{{- with .Values.serviceAccount.labels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- with .Values.serviceAccount.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- if .Values.imagePullSecrets }}
+imagePullSecrets:
+{{- range .Values.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "backend.fullname" . }}
+  labels:
+    app: {{ include "backend.name" . }}
+    chart: {{ include "backend.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+rules:
+- apiGroups:
+    - apiextensions.k8s.io
+  resources:
+    - customresourcedefinitions
+  verbs:
+    - "*"
+- apiGroups: 
+    - alertmanager.ekristen.dev
+  resources:
+    - silences
+  verbs:
+    - "*"
+- apiGroups:
+    - alertmanager.ekristen.dev
+  resources:
+    - silences/status
+  verbs:
+    - update
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "backend.fullname" . }}
+  labels:
+    app: {{ include "backend.name" .}}
+    chart: {{ include "backend.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "backend.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "backend.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+
+{{- end }}

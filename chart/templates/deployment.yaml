@@ -39,6 +39,7 @@ spec:
 {{- end }}
 {{- end }}
     spec:
+      serviceAccountName: {{ include "backend.fullname" . }}
 {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
