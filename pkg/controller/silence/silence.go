@@ -84,61 +84,56 @@ func ManageSilence(req router.Request, resp router.Response) error {
 
 	if silence.Status.ID == "" {
 		client := req.Ctx.Value(clientKey).(kclient.Client)
-		s2 := &v1.Silence{}
-		if err := client.Get(req.Ctx, kclient.ObjectKey{Namespace: silence.GetNamespace(), Name: silence.GetName()}, s2); err != nil {
+
+		logrus.Debug("handle: no id, progressing")
+		jsonData, err := json.Marshal(silence.Spec)
+		if err != nil {
 			return err
 		}
-		if s2.Status.ID == "" {
-			logrus.Info("handle: no id, progressing")
-			jsonData, err := json.Marshal(silence.Spec)
+
+		logrus.Debug("handle: creating silence")
+		amResp, err := http.Post(fmt.Sprintf("%s/api/v2/silences", amURL), "application/json", bytes.NewBuffer(jsonData))
+		if err != nil {
+			silence.Status.State = "error-http"
+			cond.Error(err)
+			resp.Objects(silence)
+			resp.RetryAfter(time.Second * 30)
+			return nil
+		}
+
+		if amResp.StatusCode > 399 {
+			errorContent, err := ioutil.ReadAll(amResp.Body)
 			if err != nil {
 				return err
 			}
 
-			logrus.Info("handle: creating silence")
-			amResp, err := http.Post(fmt.Sprintf("%s/api/v2/silences", amURL), "application/json", bytes.NewBuffer(jsonData))
-			if err != nil {
-				silence.Status.State = "error-http"
-				cond.Error(err)
-				resp.Objects(silence)
-				resp.RetryAfter(time.Minute * 2)
-				return nil
-			}
+			silence.Status.State = fmt.Sprintf("error-status-%d", amResp.StatusCode)
 
-			if amResp.StatusCode > 399 {
-				errorContent, err := ioutil.ReadAll(amResp.Body)
-				if err != nil {
-					return err
-				}
+			cond.Error(errors.New(string(errorContent)))
 
-				silence.Status.State = fmt.Sprintf("error-status-%d", amResp.StatusCode)
-
-				cond.Error(errors.New(string(errorContent)))
-
-				resp.RetryAfter(time.Minute * 2)
-				resp.Objects(silence)
-
-				return nil
-			}
-
-			var silenceResp SilenceCreateResponse
-
-			if err := json.NewDecoder(amResp.Body).Decode(&silenceResp); err != nil {
-				return err
-			}
-
-			logrus.Info("handle: saving silence response")
-
-			silence.Status.ID = silenceResp.SilenceID
-
-			if err := client.Status().Update(req.Ctx, silence, &kclient.UpdateOptions{}); err != nil {
-				return nil
-			}
-
+			resp.RetryAfter(time.Second * 30)
 			resp.Objects(silence)
 
 			return nil
 		}
+
+		var silenceResp SilenceCreateResponse
+
+		if err := json.NewDecoder(amResp.Body).Decode(&silenceResp); err != nil {
+			return err
+		}
+
+		logrus.Info("handle: saving silence response")
+
+		silence.Status.ID = silenceResp.SilenceID
+
+		if err := client.Status().Update(req.Ctx, silence, &kclient.UpdateOptions{}); err != nil {
+			return nil
+		}
+
+		resp.Objects(silence)
+
+		return nil
 	}
 
 	logrus.Info("handle: querying existing silence")
