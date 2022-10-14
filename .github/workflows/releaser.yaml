@@ -77,7 +77,7 @@ jobs:
       - name: Push Docker Images (for branches)
         if: github.ref == 'refs/heads/master' || github.event.pull_request.base.ref == 'master'
         run: |
-          docker images --format "{{.Repository}}:{{.Tag}}" | grep "sans-sroc/odin" | xargs -L1 docker push
+          docker images --format "{{.Repository}}:{{.Tag}}" | grep "ekristen/alertmanager-controller" | xargs -L1 docker push
 
   helm-chart:
     runs-on: ubuntu-latest
