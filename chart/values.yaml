@@ -4,9 +4,9 @@ minReadySeconds: 0
 
 image:
   repository: ghcr.io/ekristen/alertmanager-controller
-  tag: 1.0.0
+  tag: v0.4.0
   pullPolicy: IfNotPresent
-  pullSecret: nowsecure
+  pullSecret: null
 
 strategy:
   type: RollingUpdate
@@ -76,32 +76,6 @@ resources: {}
 #    cpu: 200m
 #    memory: 1024Mi
 
-autoscaling:
-  enabled: false
-  minReplicas: 2
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
-
-ingress:
-  enabled: false
-  tls:
-    enabled: true
-    secret: {}
-  host: example.nowsecure.io
-  #  path: / (default)
-  #   annotations:
-  #     certmanager.k8s.io/acme-challenge-type: "http01"
-  #     certmanager.k8s.io/cluster-issuer: "letsencrypt"
-  #     kubernetes.io/tls-acme: "true"
-  #     nginx.ingress.kubernetes.io: ""
-  #     nginx.ingress.kubernetes.io/auth-signin: "https://oidc/oauth2/start?rd=https://$host$request_uri$is_args$args"
-  #     nginx.ingress.kubernetes.io/auth-url: "https://oidc/oauth2/auth"
-  additionalPaths: {}
-#    - path: "/api"
-#      serviceName: xyz
-#      servicePort: 80
-
 configMaps: {}
 #    ops-tool-client:
 #      data:
@@ -157,16 +131,3 @@ volumes:
   configMapVolumes: {}
 #      - name: config-map-files
 #        configMapName: config-map-name
-
-hooks: {}
-#  - hook: post-install,post-upgrade
-#    containers:
-#      - name: post
-#        image: alpine:3.3
-#        args: ["/bin/sleep","{{ default "10" .Values.sleepyTime }}"]
-#        env:
-#          key: value
-#        envFromSecret:
-#          - name: env_var_name
-#          - secretName: name_of_secret
-#          - secretKeyRef: key_in_secret
