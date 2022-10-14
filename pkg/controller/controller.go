@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"github.com/acorn-io/baaah"
+	"github.com/acorn-io/baaah/pkg/apply"
 	"github.com/acorn-io/baaah/pkg/restconfig"
 	"github.com/acorn-io/baaah/pkg/router"
 	v1 "github.com/ekristen/alertmanager-controller/pkg/apis/alertmanager.ekristen.dev/v1"
+	"github.com/ekristen/alertmanager-controller/pkg/crds"
 	"github.com/ekristen/alertmanager-controller/pkg/scheme"
-	"github.com/ibuildthecloud/baaah/pkg/crds"
-	"github.com/rancher/wrangler/pkg/apply"
 	"k8s.io/apimachinery/pkg/runtime"
 	kclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -31,11 +31,6 @@ func New() (*Controller, error) {
 		return nil, err
 	}
 
-	apply, err := apply.NewForConfig(cfg)
-	if err != nil {
-		return nil, err
-	}
-
 	client, err := kclient.New(cfg, kclient.Options{
 		Scheme: scheme.Scheme,
 	})
@@ -43,12 +38,14 @@ func New() (*Controller, error) {
 		return nil, err
 	}
 
+	apply := apply.New(client)
+
 	routes(router, client)
 
 	return &Controller{
 		Router: router,
 		Scheme: scheme.Scheme,
-		apply:  apply.WithDynamicLookup(),
+		apply:  apply,
 	}, nil
 }
 

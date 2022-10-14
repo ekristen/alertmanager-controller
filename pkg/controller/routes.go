@@ -9,4 +9,5 @@ import (
 
 func routes(router *router.Router, client kclient.Client) {
 	router.Type(&v1.Silence{}).Middleware(silence.AttachClient(client)).Middleware(silence.SkipExpired).Middleware(silence.SkipInvalidSpec).HandlerFunc(silence.ManageSilence)
+	router.Type(&v1.Silence{}).FinalizeFunc("alertmanager.ekristen.dev/silence", silence.RemoveSilence)
 }

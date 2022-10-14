@@ -41,8 +41,9 @@ func Flags() []cli.Flag {
 
 func Before(c *cli.Context) error {
 	formatter := &logrus.TextFormatter{
-		DisableColors: c.Bool("log-disable-color"),
-		FullTimestamp: c.Bool("log-full-timestamp"),
+		DisableColors:   c.Bool("log-disable-color"),
+		FullTimestamp:   c.Bool("log-full-timestamp"),
+		TimestampFormat: "2006-01-02T15:04:05.999999999Z07:00",
 	}
 	if c.Bool("log-caller") {
 		logrus.SetReportCaller(true)
