@@ -4,8 +4,8 @@ metadata:
   name: testing
 spec:
   url: http://192.168.11.76:9093
-  startsAt: 2022-10-11T00:00:00Z
-  endsAt: 2022-10-13T13:20:00Z
+  startsAt: 2022-10-14T00:00:00Z
+  endsAt: 2022-10-17T13:20:00Z
   createdBy: alertmanager-controller
   comment: "automated silence"
   matchers:

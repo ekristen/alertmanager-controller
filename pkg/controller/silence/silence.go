@@ -131,7 +131,10 @@ func ManageSilence(req router.Request, resp router.Response) error {
 
 			silence.Status.ID = silenceResp.SilenceID
 
-			fmt.Println(silence.Status)
+			if err := client.Status().Update(req.Ctx, silence, &kclient.UpdateOptions{}); err != nil {
+				return nil
+			}
+
 			resp.Objects(silence)
 
 			return nil
