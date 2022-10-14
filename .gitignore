@@ -3,3 +3,4 @@ cosign.key
 /*.yaml
 releases
 vendor
+*.tgz

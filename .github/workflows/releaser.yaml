@@ -78,3 +78,25 @@ jobs:
         if: github.ref == 'refs/heads/master' || github.event.pull_request.base.ref == 'master'
         run: |
           docker images --format "{{.Repository}}:{{.Tag}}" | grep "sans-sroc/odin" | xargs -L1 docker push
+
+  helm-chart:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') == true
+    needs:
+      - goreleaser
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: azure/setup-helm@v3
+      - run: |
+          helm package chart
+          echo "chart_file=$(ls -a *.tgz | head -n1)" >> $GITHUB_ENV
+      - name: upload helm chart
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.chart_file }}
+          asset_name: ${{ env.chart_file }}
+          tag: ${{ github.ref }}
+          overwrite: true
