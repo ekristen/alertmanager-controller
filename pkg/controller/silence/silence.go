@@ -15,6 +15,7 @@ import (
 	v1 "github.com/ekristen/alertmanager-controller/pkg/apis/alertmanager.ekristen.dev/v1"
 	"github.com/ekristen/alertmanager-controller/pkg/condition"
 	"github.com/sirupsen/logrus"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -76,6 +77,21 @@ func SkipInvalidSpec(h router.Handler) router.Handler {
 	})
 }
 
+func SetExpired(h router.Handler) router.Handler {
+	return router.HandlerFunc(func(req router.Request, resp router.Response) error {
+		silence := req.Object.(*v1.Silence)
+
+		now := metav1.Now()
+		if silence.Spec.EndsAt.Before(&now) {
+			silence.Status.State = "expired"
+			resp.Objects(silence)
+			return nil
+		}
+
+		return h.Handle(req, resp)
+	})
+}
+
 func ManageSilence(req router.Request, resp router.Response) error {
 	silence := req.Object.(*v1.Silence)
 	cond := condition.Setter(silence, resp, "managed")
@@ -85,8 +101,16 @@ func ManageSilence(req router.Request, resp router.Response) error {
 	if silence.Status.ID == "" {
 		client := req.Ctx.Value(clientKey).(kclient.Client)
 
+		newSilence := silence.Spec.DeepCopy()
+		if newSilence.Comment == "" {
+			newSilence.Comment = "automated silence"
+		}
+		if newSilence.CreatedBy == "" {
+			newSilence.CreatedBy = "alertmanager-controller"
+		}
+
 		logrus.Debug("handle: no id, progressing")
-		jsonData, err := json.Marshal(silence.Spec)
+		jsonData, err := json.Marshal(newSilence)
 		if err != nil {
 			return err
 		}
