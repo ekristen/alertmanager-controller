@@ -43,6 +43,30 @@ func AttachClient(client kclient.Client) router.Middleware {
 	})
 }
 
+func SetDefaults(h router.Handler) router.Handler {
+	return router.HandlerFunc(func(req router.Request, resp router.Response) error {
+		silence := req.Object.(*v1.Silence)
+
+		isChanged := false
+
+		if silence.Spec.Comment == "" {
+			silence.Spec.Comment = "(no comment) - created by alertmanager-controller"
+			isChanged = true
+		}
+		if silence.Spec.CreatedBy == "" {
+			silence.Spec.CreatedBy = "alertmanager-controller"
+			isChanged = true
+		}
+
+		if isChanged {
+			resp.Objects(silence)
+			return nil
+		}
+
+		return h.Handle(req, resp)
+	})
+}
+
 func SkipExpired(h router.Handler) router.Handler {
 	return router.HandlerFunc(func(req router.Request, resp router.Response) error {
 		silence := req.Object.(*v1.Silence)

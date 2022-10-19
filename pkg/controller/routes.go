@@ -10,6 +10,7 @@ import (
 func routes(router *router.Router, client kclient.Client) {
 	router.Type(&v1.Silence{}).
 		Middleware(silence.AttachClient(client)).
+		Middleware(silence.SetDefaults).
 		Middleware(silence.SetExpired).
 		Middleware(silence.SkipExpired).
 		Middleware(silence.SkipInvalidSpec).

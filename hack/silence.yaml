@@ -6,8 +6,6 @@ spec:
   url: http://192.168.11.76:9093
   startsAt: 2022-10-17T00:00:00Z
   endsAt: 2022-10-18T13:20:00Z
-  createdBy: alertmanager-controller
-  comment: "automated silence"
   matchers:
     - name: blah
       value: bleh
