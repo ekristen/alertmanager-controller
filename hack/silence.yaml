@@ -4,8 +4,8 @@ metadata:
   name: testing
 spec:
   url: http://192.168.11.76:9093
-  startsAt: 2022-10-17T00:00:00Z
-  endsAt: 2022-10-18T13:20:00Z
+  startsAt: 2022-10-25T13:40:00Z
+  endsAt: 2022-10-18T13:46:30Z
   matchers:
     - name: blah
       value: bleh

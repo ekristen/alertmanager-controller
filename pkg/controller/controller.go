@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"time"
 
 	"github.com/acorn-io/baaah"
 	"github.com/acorn-io/baaah/pkg/apply"
@@ -20,7 +21,12 @@ type Controller struct {
 	apply  apply.Apply
 }
 
-func New() (*Controller, error) {
+type ControllerOpts struct {
+	GCExpired      bool
+	GCExpiredDelay time.Duration
+}
+
+func New(opts *ControllerOpts) (*Controller, error) {
 	router, err := baaah.DefaultRouter(scheme.Scheme)
 	if err != nil {
 		return nil, err
@@ -40,7 +46,7 @@ func New() (*Controller, error) {
 
 	apply := apply.New(client)
 
-	routes(router, client)
+	routes(router, client, opts)
 
 	return &Controller{
 		Router: router,

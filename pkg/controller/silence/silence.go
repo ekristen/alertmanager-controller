@@ -67,16 +67,36 @@ func SetDefaults(h router.Handler) router.Handler {
 	})
 }
 
-func SkipExpired(h router.Handler) router.Handler {
-	return router.HandlerFunc(func(req router.Request, resp router.Response) error {
-		silence := req.Object.(*v1.Silence)
+func SkipExpired(gcexpired bool, gcdelay time.Duration) router.Middleware {
+	logrus.Trace("initialized")
+	return (func(h router.Handler) router.Handler {
+		logrus.Trace("added middleware")
+		return router.HandlerFunc(func(req router.Request, resp router.Response) error {
+			logrus.Trace("middleware called")
+			silence := req.Object.(*v1.Silence)
 
-		if silence.Status.State == "expired" {
-			logrus.Info("handle: expired")
-			return nil
-		}
+			if silence.Status.State == "expired" {
+				if gcexpired {
+					logrus.Info("garbage collect expired")
+					if silence.Spec.EndsAt.Add(gcdelay).Before(time.Now().UTC()) {
+						client := req.Ctx.Value(clientKey).(kclient.Client)
+						if err := client.Delete(req.Ctx, silence, &kclient.DeleteOptions{}); err != nil {
+							return err
+						}
+					} else {
+						// Set retry for GC
+						resp.RetryAfter(gcdelay)
+						resp.Objects(silence)
+					}
+				}
 
-		return h.Handle(req, resp)
+				logrus.Info("handle: expired")
+
+				return nil
+			}
+
+			return h.Handle(req, resp)
+		})
 	})
 }
 
@@ -106,7 +126,7 @@ func SetExpired(h router.Handler) router.Handler {
 		silence := req.Object.(*v1.Silence)
 
 		now := metav1.Now()
-		if silence.Spec.EndsAt.Before(&now) {
+		if silence.Spec.EndsAt.Before(&now) && silence.Status.State != "expired" {
 			silence.Status.State = "expired"
 			resp.Objects(silence)
 			return nil
@@ -266,9 +286,5 @@ func RemoveSilence(req router.Request, resp router.Response) error {
 		}
 	}
 
-	return nil
-}
-
-func ManageSilence2(req router.Request, resp router.Response) error {
 	return nil
 }

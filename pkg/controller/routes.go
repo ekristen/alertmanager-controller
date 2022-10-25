@@ -7,12 +7,12 @@ import (
 	kclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-func routes(router *router.Router, client kclient.Client) {
+func routes(router *router.Router, client kclient.Client, opts *ControllerOpts) {
 	router.Type(&v1.Silence{}).
 		Middleware(silence.AttachClient(client)).
 		Middleware(silence.SetDefaults).
 		Middleware(silence.SetExpired).
-		Middleware(silence.SkipExpired).
+		Middleware(silence.SkipExpired(opts.GCExpired, opts.GCExpiredDelay)).
 		Middleware(silence.SkipInvalidSpec).
 		HandlerFunc(silence.ManageSilence)
 
