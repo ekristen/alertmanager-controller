@@ -76,7 +76,7 @@ func SkipExpired(gcexpired bool, gcdelay time.Duration) router.Middleware {
 			silence := req.Object.(*v1.Silence)
 
 			if silence.Status.State == "expired" {
-				if gcexpired {
+				if gcexpired && len(silence.GetOwnerReferences()) == 0 {
 					logrus.Info("garbage collect expired")
 					if silence.Spec.EndsAt.Add(gcdelay).Before(time.Now().UTC()) {
 						client := req.Ctx.Value(clientKey).(kclient.Client)
