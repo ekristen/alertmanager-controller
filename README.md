@@ -1,6 +1,6 @@
 # Alertmanager Controller
 
-**Status:** Alpha
+**Status:** Beta
 
 Create silences in Alertmanager using a kubernetes resource.
 
