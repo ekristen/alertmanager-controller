@@ -4,3 +4,4 @@ cosign.key
 releases
 vendor
 *.tgz
+.idea
