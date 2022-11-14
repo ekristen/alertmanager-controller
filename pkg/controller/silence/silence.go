@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -170,7 +170,7 @@ func ManageSilence(req router.Request, resp router.Response) error {
 		}
 
 		if amResp.StatusCode > 399 {
-			errorContent, err := ioutil.ReadAll(amResp.Body)
+			errorContent, err := io.ReadAll(amResp.Body)
 			if err != nil {
 				return err
 			}
@@ -218,7 +218,7 @@ func ManageSilence(req router.Request, resp router.Response) error {
 	}
 
 	if amResp.StatusCode > 399 {
-		errorContent, err := ioutil.ReadAll(amResp.Body)
+		errorContent, err := io.ReadAll(amResp.Body)
 		if err != nil {
 			return err
 		}
@@ -243,9 +243,18 @@ func ManageSilence(req router.Request, resp router.Response) error {
 
 	cond.Success()
 
-	if silence.Status.State == "pending" || silence.Status.State == "active" {
-		resp.RetryAfter(time.Minute * 5)
+	now := time.Now().UTC()
+	metaNow := metav1.NewTime(now)
+	var retryAfterDuration time.Duration = time.Minute * 1
+	if silence.Status.State == "pending" {
+		if !silence.Spec.StartsAt.Before(&metaNow) {
+			retryAfterDuration = silence.Spec.StartsAt.Sub(now)
+		}
+	} else if silence.Status.State == "active" {
+		retryAfterDuration = silence.Spec.EndsAt.Sub(now)
 	}
+
+	resp.RetryAfter(retryAfterDuration)
 
 	return nil
 }
