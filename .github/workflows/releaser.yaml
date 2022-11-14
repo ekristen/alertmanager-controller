@@ -101,3 +101,13 @@ jobs:
           asset_name: ${{ env.chart_file }}
           tag: ${{ github.ref }}
           overwrite: true
+
+  release-chart:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') == true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish Helm charts
+        uses: stefanprodan/helm-gh-pages@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
