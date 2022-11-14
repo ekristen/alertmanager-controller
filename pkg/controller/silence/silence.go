@@ -19,13 +19,13 @@ import (
 	kclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-type SilenceResponse struct {
+type Response struct {
 	v1.SilenceSpec `json:",inline"`
 	ID             string           `json:"id"`
 	Status         v1.SilenceStatus `json:"status"`
 }
 
-type SilenceCreateResponse struct {
+type CreateResponse struct {
 	SilenceID string `json:"silenceID"`
 }
 
@@ -185,7 +185,7 @@ func ManageSilence(req router.Request, resp router.Response) error {
 			return nil
 		}
 
-		var silenceResp SilenceCreateResponse
+		var silenceResp CreateResponse
 
 		if err := json.NewDecoder(amResp.Body).Decode(&silenceResp); err != nil {
 			return err
@@ -205,7 +205,7 @@ func ManageSilence(req router.Request, resp router.Response) error {
 	}
 
 	logrus.Info("handle: querying existing silence")
-	var silenceResp SilenceResponse
+	var silenceResp Response
 
 	amResp, err := http.Get(fmt.Sprintf("%s/api/v2/silence/%s", amURL, silence.Status.ID))
 	if err != nil {
@@ -245,7 +245,7 @@ func ManageSilence(req router.Request, resp router.Response) error {
 
 	now := time.Now().UTC()
 	metaNow := metav1.NewTime(now)
-	var retryAfterDuration time.Duration = time.Minute * 1
+	var retryAfterDuration = time.Minute * 1
 	if silence.Status.State == "pending" {
 		if !silence.Spec.StartsAt.Before(&metaNow) {
 			retryAfterDuration = silence.Spec.StartsAt.Sub(now)
