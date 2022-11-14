@@ -34,13 +34,13 @@ type ContextKey string
 var clientKey ContextKey = "client"
 
 func AttachClient(client kclient.Client) router.Middleware {
-	return (func(h router.Handler) router.Handler {
+	return func(h router.Handler) router.Handler {
 		return router.HandlerFunc(func(req router.Request, resp router.Response) error {
 			req.Ctx = context.WithValue(req.Ctx, clientKey, client)
 
 			return h.Handle(req, resp)
 		})
-	})
+	}
 }
 
 func SetDefaults(h router.Handler) router.Handler {
@@ -69,7 +69,7 @@ func SetDefaults(h router.Handler) router.Handler {
 
 func SkipExpired(gcexpired bool, gcdelay time.Duration) router.Middleware {
 	logrus.Trace("initialized")
-	return (func(h router.Handler) router.Handler {
+	return func(h router.Handler) router.Handler {
 		logrus.Trace("added middleware")
 		return router.HandlerFunc(func(req router.Request, resp router.Response) error {
 			logrus.Trace("middleware called")
@@ -97,7 +97,7 @@ func SkipExpired(gcexpired bool, gcdelay time.Duration) router.Middleware {
 
 			return h.Handle(req, resp)
 		})
-	})
+	}
 }
 
 func SkipInvalidSpec(h router.Handler) router.Handler {
