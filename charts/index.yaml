@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  alertmanager-controller:
+  - apiVersion: v1
+    appVersion: 0.5.4
+    created: "2022-11-14T21:37:17.337920293Z"
+    description: Deploys ekristen.dev Alertmanager Controller for automated Silence
+      creation
+    digest: 346f0e04bbebfc8dea6575011a1e66aa5e24fb8515d5d7d81097a3ebce603270
+    name: alertmanager-controller
+    urls:
+    - https://ekristen.github.io/alertmanager-controller/charts/alertmanager-controller-1.7.7.tgz
+    version: 1.7.7
+generated: "2022-11-14T21:37:17.337176683Z"
