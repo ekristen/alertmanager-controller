@@ -37,7 +37,7 @@ container:
   port: 8080
 
 metrics:
-  enabled: true
+  enabled: false
   path: /metrics
 
 ## Pod Annotations
