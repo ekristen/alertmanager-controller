@@ -18,12 +18,12 @@ jobs:
   goreleaser:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         if: github.event_name == 'pull_request'
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         if: github.event_name == 'push'
         with:
           fetch-depth: 0
@@ -85,7 +85,7 @@ jobs:
     needs:
       - goreleaser
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: azure/setup-helm@v3
@@ -106,7 +106,7 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/') == true
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: |
           mkdir -p charts
           mv chart charts/alertmanager-controller/
