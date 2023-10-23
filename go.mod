@@ -81,4 +81,4 @@ require (
 
 replace github.com/acorn-io/baaah => github.com/ibuildthecloud/baaah v0.0.0-20221014214633-c3b5334d496c
 
-replace github.com/rancher/lasso => github.com/acorn-io/lasso v0.0.0-20220519152917-47b14aceb5cf
+replace github.com/rancher/lasso => github.com/acorn-io/lasso v0.0.0-20220519004610-700f167d8324
