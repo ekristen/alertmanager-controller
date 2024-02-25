@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/acorn-io/baaah v0.0.0-20220711235249-cb4eb828afed
 	github.com/rancher/wrangler v1.0.0
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli/v2 v2.27.1
 	k8s.io/api v0.24.3
 	k8s.io/apimachinery v0.24.3
