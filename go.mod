@@ -3,7 +3,7 @@ module github.com/ekristen/alertmanager-controller
 go 1.18
 
 require (
-	github.com/acorn-io/baaah v0.0.0-20220711235249-cb4eb828afed
+	github.com/acorn-io/baaah v0.0.0-20241031014532-41ccf5acc58b
 	github.com/rancher/wrangler v1.0.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.27.1
